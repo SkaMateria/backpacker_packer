@@ -56,7 +56,7 @@ function listBackpackItems(item) {
     let itemIcon = document.createElement("div")
     let btn = document.createElement("button")
     btn.addEventListener("dblclick", renderEditDeleteButtons)
-    btn.innerText = item.name
+    btn.innerHTML = `<span>${item.name}</span>`
     itemIcon.appendChild(btn)
     backpackItemList.appendChild(itemIcon)
 }
@@ -79,7 +79,7 @@ function listAllItems(item) {
     let btn = document.createElement("button")
     btn.className = item.id
     btn.addEventListener("dblclick", renderEditDeleteButtons)
-    btn.innerText = `${item.name}`
+    btn.innerHTML = `<span>${item.name}</span>`
     itemIcon.appendChild(btn)
     backpackItemList.appendChild(itemIcon)
 }
@@ -108,15 +108,29 @@ function renderEditDeleteButtons(e){
     let deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.style.backgroundColor = "red"
-    e.target.appendChild(editButton)
-    e.target.appendChild(deleteButton)
+    e.target.parentElement.appendChild(editButton)
+    e.target.parentElement.appendChild(deleteButton)
     deleteButton.addEventListener("click", deleteItem)
+    editButton.addEventListener("click", editItem)
 }
 
 function deleteItem(e) {
     let itemId = parseInt(e.target.parentElement.className)
-    // debugger
     fetch(ITEMS_URL + "/" + itemId, {
         method: "DELETE"
     })
+    .then(resp => e.target.parentElement.remove())
+}
+
+function editItem(e) {
+    let itemId = parseInt(e.target.parentElement.className)
+    // debugger
+    fetch(ITEMS_URL + "/" + itemId, {
+        method: "PATCH",
+        body: JSON.stringify({
+            text: e.target.parentElement.firstChild.innerText
+        })
+    })
+    // .then(resp => resp.json())
+    .then(data => console.log(data))
 }
