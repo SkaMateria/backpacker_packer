@@ -106,7 +106,7 @@ function postItem(e){
 function renderEditDeleteButtons(e){
     if(e.target.parentElement.dataset.selected === "true") {
         e.target.parentElement.children[1].remove()
-        e.target.parentElement.children[1].remove()
+        e.target.firstElementChild.remove()
         e.target.parentElement.dataset.selected = "false"
     }
         
@@ -142,23 +142,27 @@ function editItem(e) {
     <input type="text" name="name" value=${itemText} class="input-text">
     <input type="submit" name="submit" value="Update" class="submit">
     `
-    let updateButton = newEl.lastElementChild
     newEl.value = itemText
     e.target.parentElement.parentElement.replaceChild(newEl, el);
-    updateButton.addEventListener("click", patchItem)
+    newEl.addEventListener("submit", patchItem)
     
 }
 
 function patchItem(e) {
     e.preventDefault()
-    let itemId = parseInt(e.target.parentElement.parentElement.className)
-    // debugger
+    let itemId = parseInt(e.target.parentElement.className)
     fetch(ITEMS_URL + "/" + itemId, {
         method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
         body: JSON.stringify({
-            name: e.target.parentElement.firstElementChild.value
+            name: e.target.name.value
+
         })
     })
-    // .then(resp => resp.json())
-    .then(data => console.log(data))   
+    .then(resp => resp.json())
+    .then(element => allItemsData(element))   
 }
+
