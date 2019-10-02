@@ -78,6 +78,7 @@ function listAllItems(item) {
     let itemIcon = document.createElement("div")
     let btn = document.createElement("button")
     btn.className = item.id
+    btn.dataset.selected = "false"
     btn.addEventListener("dblclick", renderEditDeleteButtons)
     btn.innerHTML = `<span>${item.name}</span>`
     itemIcon.appendChild(btn)
@@ -99,19 +100,30 @@ function postItem(e){
     })
     .then(resp => resp.json())
     .then(newItem => allItemsData(newItem))
+    e.target.parentElement.lastElementChild.value = ""
 }
 
 function renderEditDeleteButtons(e){
+    if(e.target.parentElement.dataset.selected === "true") {
+        e.target.parentElement.children[1].remove()
+        e.target.parentElement.children[1].remove()
+        e.target.parentElement.dataset.selected = "false"
+    }
+        
+    else if(e.target.parentElement.dataset.selected === "false")
+    {    
+    e.target.parentElement.dataset.selected = true
     let editButton = document.createElement("button")
     editButton.innerText = "Edit"
     editButton.style.backgroundColor = "orange"
     let deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.style.backgroundColor = "red"
-    e.target.parentElement.appendChild(editButton)
+    e.target.appendChild(editButton)
     e.target.parentElement.appendChild(deleteButton)
     deleteButton.addEventListener("click", deleteItem)
     editButton.addEventListener("click", editItem)
+    }
 }
 
 function deleteItem(e) {
@@ -123,14 +135,30 @@ function deleteItem(e) {
 }
 
 function editItem(e) {
-    let itemId = parseInt(e.target.parentElement.className)
+    let itemText = e.target.parentElement.firstChild.textContent
+    let el = e.target.parentElement
+    let newEl = document.createElement("form")
+    newEl.innerHTML = `
+    <input type="text" name="name" value=${itemText} class="input-text">
+    <input type="submit" name="submit" value="Update" class="submit">
+    `
+    let updateButton = newEl.lastElementChild
+    newEl.value = itemText
+    e.target.parentElement.parentElement.replaceChild(newEl, el);
+    updateButton.addEventListener("click", patchItem)
+    
+}
+
+function patchItem(e) {
+    e.preventDefault()
+    let itemId = parseInt(e.target.parentElement.parentElement.className)
     // debugger
     fetch(ITEMS_URL + "/" + itemId, {
         method: "PATCH",
         body: JSON.stringify({
-            text: e.target.parentElement.firstChild.innerText
+            name: e.target.parentElement.firstElementChild.value
         })
     })
     // .then(resp => resp.json())
-    .then(data => console.log(data))
+    .then(data => console.log(data))   
 }
