@@ -1,6 +1,7 @@
 //! See how that BOOTSTRAP extension works
 //! check out anime.js
 
+// const anime = require('anime');
 const BASE_URL = "http://localhost:3000"
 const BACKPACKS_URL = `${BASE_URL}/backpacks`
 const ITEMS_URL = `${BASE_URL}/items`
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     submitItemButton.addEventListener("click", postItem)
 })
 
+
 function backpackData(){
     fetch(BACKPACKS_URL)
     .then(resp => resp.json())
@@ -23,7 +25,7 @@ function backpackData(){
 
 function fetchBackpack(backpacks){
     backpacks.forEach(backpack => {
-        backpackIcon(backpack)
+        backpackIcon(backpack)x
     })
 }
 
