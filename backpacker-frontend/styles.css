@@ -7,12 +7,16 @@ body {
   header {
     background-color: #4caf50;
     margin: 0 auto;
-    height: 50px;
+    height: 100px;
   }
   
   header h2 {
     padding: 10px;
     margin: 0;
+    font-size: 100px;
+    text-decoration-color: #E1332D;
+    text-emphasis: circle;
+    color: #eeeeee;
   }
   
   main {
@@ -21,7 +25,7 @@ body {
     grid-template-rows: auto;
     grid-gap: 20px;
     padding-top: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 50px;
   }
 
   
@@ -50,10 +54,30 @@ body {
   }
   
   button {
-    font-size: .65em;
+    font-size: 16px;
     color: #fff;
     background-color: rgb(18, 115, 139);
-    border-radius: 20px;
+    border-radius: 7px;
+    padding: 15px 32px;
+    display: inline-block;
+    border: darkred;
+    margin: 1px 2px;
+    cursor: pointer;
+    /* transform: rotate(-8deg) */
+  }
+
+  @keyframes colors {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
+  }
+  button:hover {
+    transform: translate(5px, 5px);
+    transform: rotate(6deg);
+    animation-name: colors;
+    animation-duration: 4s;
   }
   
   button.release {

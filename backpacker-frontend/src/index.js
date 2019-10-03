@@ -25,13 +25,14 @@ function backpackData(){
 
 function fetchBackpack(backpacks){
     backpacks.forEach(backpack => {
-        backpackIcon(backpack)x
+        backpackIcon(backpack)
     })
 }
 
 function backpackIcon(backpack) {
     let bpIcon = document.createElement("div")
     let btn = document.createElement("button")
+    btn.className = "ui button"
     btn.setAttribute('id', backpack.id)
     btn.innerText = backpack.name
     btn.addEventListener("click", (e) => {
